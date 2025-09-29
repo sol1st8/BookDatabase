@@ -53,7 +53,7 @@ public:
         AddAuthor(books_.back());
     }
 
-    const std::span<Book> &GetBooks() const noexcept { return books_; }
+    const std::span<const Book> GetBooks() const noexcept { return books_; }
     const AuthorContainer &GetAuthors() const noexcept { return authors_; }
 
     template <typename... Args>

@@ -33,12 +33,12 @@ struct Book {
     double rating;
     int read_count;
 
-    constexpr Book(std::string_view author, std::string_view title, int year, std::string_view genre_str, double rating,
+    constexpr Book(std::string_view title, std::string_view author, int year, std::string_view genre_str, double rating,
                    int read_count)
         : author(author), title(title), year(year), genre(GenreFromString(genre_str)), rating(rating),
           read_count(read_count) {}
 
-    constexpr Book(std::string_view author, std::string_view title, int year, Genre genre, double rating,
+    constexpr Book(std::string_view title, std::string_view author, int year, Genre genre, double rating,
                    int read_count)
         : author(author), title(title), year(year), genre(genre), rating(rating), read_count(read_count) {}
 

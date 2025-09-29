@@ -27,19 +27,16 @@ concept BookContainerLike = requires(T t) {
 };
 
 template <typename T>
-concept BookIterator = std::random_access_iterator<T> &&
-                       std::same_as<std::iter_value_t<T>, Book> &&
-                       std::convertible_to<std::iter_reference_t<T>, const Book&>;
+concept BookIterator = std::random_access_iterator<T> && std::same_as<std::iter_value_t<T>, Book> &&
+                       std::convertible_to<std::iter_reference_t<T>, const Book &>;
 
 template <typename S, typename I>
 concept BookSentinel = std::sentinel_for<S, I>;
 
 template <typename P>
-concept BookPredicate = std::predicate<P, Book> || 
-                        std::predicate<P, const Book&>;
+concept BookPredicate = std::predicate<P, Book> || std::predicate<P, const Book &>;
 
 template <typename C>
-concept BookComparator = std::predicate<C, const Book&, const Book&> ||
-                         std::predicate<C, Book, Book>;
+concept BookComparator = std::predicate<C, const Book &, const Book &> || std::predicate<C, Book, Book>;
 
 }  // namespace bookdb
