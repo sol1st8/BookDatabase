@@ -36,9 +36,10 @@ auto calculateGenreRatings(const BookDatabase<T> &cont) {
     }
 
     std::flat_map<Genre, double> res;
-    for (auto it = fmGenreInfo.cbegin(); it != fmGenreInfo.cend(); ++it) {
-        res.emplace(it->first, it->second.rating / it->second.count);
-    }
+    std::transform(fmGenreInfo.begin(), fmGenreInfo.end(), std::inserter(res, res.end()), [](const auto &genre_info) {
+        const auto &[genre, stats] = genre_info;
+        return std::pair{genre, stats.rating / stats.count};
+    });
 
     return res;
 }

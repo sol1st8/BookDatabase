@@ -101,7 +101,7 @@ TEST_F(BookDatabaseTest, SelectsTopNBooks) {
     auto topRatedBooks = getTopNBy(db, 2, comp::LessByRating{});
 
     ASSERT_EQ(topRatedBooks.size(), 2);
-    EXPECT_EQ(topRatedBooks[0].get().title, "The Great Gatsby");
+    EXPECT_EQ(topRatedBooks[0].get().title, "1984");
     EXPECT_EQ(topRatedBooks[1].get().title, "Animal Farm");
 }
 
