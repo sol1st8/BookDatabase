@@ -8,11 +8,14 @@ namespace bookdb {
 
 enum class Genre { Fiction, NonFiction, SciFi, Biography, Mystery, Unknown };
 
-// Ваш код для constexpr преобразования строк в enum::Genre и наоборот здесь
-
 constexpr Genre GenreFromString(std::string_view s) {
-    // Ваш код здесь
-    return Genre::Unknown;
+    constexpr std::array genres = {std::pair{"Fiction", Genre::Fiction}, std::pair{"NonFiction", Genre::NonFiction},
+                                   std::pair{"SciFi", Genre::SciFi}, std::pair{"Biography", Genre::Biography},
+                                   std::pair{"Mystery", Genre::Mystery}};
+
+    auto it = std::find_if(genres.begin(), genres.end(), [s](const auto &pair) { return pair.first == s; });
+
+    return it != genres.end() ? it->second : Genre::Unknown;
 }
 
 struct Book {
@@ -25,7 +28,16 @@ struct Book {
     double rating;
     int read_count;
 
-    // Ваш код для конструкторов здесь
+    constexpr Book(std::string_view title, std::string_view author, int year, std::string_view genre_str, double rating,
+                   int read_count)
+        : author(author), title(title), year(year), genre(GenreFromString(genre_str)), rating(rating),
+          read_count(read_count) {}
+
+    constexpr Book(std::string_view title, std::string_view author, int year, Genre genre, double rating,
+                   int read_count)
+        : author(author), title(title), year(year), genre(genre), rating(rating), read_count(read_count) {}
+
+    auto operator<=>(const Book &) const = default;
 };
 }  // namespace bookdb
 
@@ -57,6 +69,16 @@ struct formatter<bookdb::Genre, char> {
     }
 };
 
-// Ваш код для std::formatter<Book> здесь
+template <>
+struct formatter<bookdb::Book, char> {
+    template <typename FormatContext>
+    auto format(const bookdb::Book &book, FormatContext &fc) const {
+        constexpr auto fmt("Author : {}, title : {}, year : {}, genre : {}, rating : {}, read_count : {}");
+
+        return format_to(fc.out(), fmt, book.author, book.title, book.year, book.genre, book.rating, book.read_count);
+    }
+
+    constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+};
 
 }  // namespace std
